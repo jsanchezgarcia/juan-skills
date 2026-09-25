@@ -106,6 +106,13 @@
       "skillPath": "skills/productivity/grilling/SKILL.md",
       "computedHash": "4dd886b0196bf43729d954ae326016f2bd9f5f79d892500b407c33a753362f14"
     },
+    "improve-codebase-architecture": {
+      "source": "mattpocock/skills",
+      "ref": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "computedHash": "2449db6ab1ded9581f69fcc56c1f64818112d05e271fd4c5da23c6523f9d3d9d"
+    },
     "prototype": {
       "source": "mattpocock/skills",
       "ref": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
@@ -154,6 +161,13 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/wayfinder/SKILL.md",
       "computedHash": "fa790eb4255b13d24d7e33ff4891ccd3d621558cc0ab87ae226777538ea16a8f"
+    },
+    "writing-for-agents": {
+      "source": "mattpocock/skills",
+      "ref": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/writing-for-agents/SKILL.md",
+      "computedHash": "95da47fc97af998e85b7d7e6d57b3ac76727c1e290cfe9ea09005aacb826959f"
     }
   }
 }

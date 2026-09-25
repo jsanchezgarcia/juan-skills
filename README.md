@@ -4,7 +4,7 @@ The skills I use, for every agent: Claude Code, Codex, Amp and Cursor, locally a
 
 | Source | Skills | Pinned in |
 |---|---|---|
-| [mattpocock/skills](https://github.com/mattpocock/skills) | codebase-design, domain-modeling, grilling, prototype, research, setup-matt-pocock-skills, tdd, to-spec, to-tickets, wayfinder | `skills-lock.json` (a `main` commit; his releases lag) |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | codebase-design, domain-modeling, grilling, improve-codebase-architecture, prototype, research, setup-matt-pocock-skills, tdd, to-spec, to-tickets, wayfinder, writing-for-agents | `skills-lock.json` (a `main` commit; his releases lag) |
 | [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) | ce-plan, ce-work, ce-debug, ce-handoff, ce-resolve-pr-feedback, and the skills they call: ce-simplify-code, ce-code-review, ce-doc-review, ce-noslop, ce-commit-push-pr, ce-commit, ce-babysit-pr | `skills-lock.json` (a release tag) |
 | Mine | design-review, split-commits | — |
 
@@ -33,6 +33,7 @@ Paste this into Claude Code, Codex, Amp or Cursor on the new machine:
 |---|---|
 | Claude Code cloud | At claude.ai/code, edit the environment and paste the cloud snippet below into **Setup script**.  |
 | Claude Code cloud | At claude.ai → Customize → Skills, remove the skills uploaded earlier, so they don't load twice. |
+| Claude Code cloud | At claude.ai → Customize, remove the compound-engineering plugin. The cloud turns it on at every session start, loading all of CE next to this repo's subset; `settings.json` can't keep it off. |
 | Codex cloud | At chatgpt.com/codex → Environments, paste the cloud snippet into the environment's setup script. |
 | Cursor cloud | Cursor Settings → Agents → turn on **Sync Skills for Cloud Agents**. It uploads `~/.cursor/skills`. |
 | Amp cloud | Nothing: pushing this repo publishes to Amp's hosted skills repo. |
