@@ -31,7 +31,7 @@ Paste this into Claude Code, Codex, Amp or Cursor on the new machine:
 
 | Where | Step |
 |---|---|
-| Claude Code cloud | At claude.ai/code, edit the environment and paste the cloud snippet below into **Setup script**. The Claude GitHub app needs access to `juan-skills`. |
+| Claude Code cloud | At claude.ai/code, edit the environment and paste the cloud snippet below into **Setup script**.  |
 | Claude Code cloud | At claude.ai → Customize → Skills, remove the skills uploaded earlier, so they don't load twice. |
 | Codex cloud | At chatgpt.com/codex → Environments, paste the cloud snippet into the environment's setup script. |
 | Cursor cloud | Cursor Settings → Agents → turn on **Sync Skills for Cloud Agents**. It uploads `~/.cursor/skills`. |
@@ -41,11 +41,16 @@ Cloud snippet:
 
 ```sh
 dest="$HOME/src/juan-skills"
-if [ -d "$dest/.git" ]; then git -C "$dest" pull -q --ff-only; else git clone -q --depth 1 https://github.com/jsanchezgarcia/juan-skills.git "$dest"; fi
-"$dest/scripts/link.sh"
+log=/tmp/juan-skills-setup.log
+{
+  if [ -d "$dest/.git" ]; then git -C "$dest" pull -q --ff-only; else git clone -q --depth 1 https://github.com/jsanchezgarcia/juan-skills.git "$dest"; fi && "$dest/scripts/link.sh"
+} >"$log" 2>&1 || echo "juan-skills setup failed, see $log"
+true
 ```
 
-Check a cloud with a new session: "List your skills, and say whether `~/src/juan-skills` exists and which commit it's on." Compare the commit with `git log -1` here.
+A failure is logged to `/tmp/juan-skills-setup.log` and never blocks the session.
+
+Check a cloud with a new session: "List your skills, say which commit `~/src/juan-skills` is on, and show `/tmp/juan-skills-setup.log`." Compare the commit with `git log -1` here.
 
 ## Day to day
 
