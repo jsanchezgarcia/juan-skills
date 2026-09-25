@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Publishes to Amp whenever this repo is pushed to GitHub.
+[ "$1" = origin ] || exit 0
+exec "$(git rev-parse --show-toplevel)/scripts/publish-amp.sh"
