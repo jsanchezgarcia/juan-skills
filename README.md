@@ -40,15 +40,14 @@ Paste this into Claude Code, Codex, Amp or Cursor on the new machine:
 Cloud snippet:
 
 ```sh
-dest="$HOME/src/juan-skills"
-log=/tmp/juan-skills-setup.log
-{
-  if [ -d "$dest/.git" ]; then git -C "$dest" pull -q --ff-only; else git clone -q --depth 1 https://github.com/jsanchezgarcia/juan-skills.git "$dest"; fi && "$dest/scripts/link.sh"
-} >"$log" 2>&1 || echo "juan-skills setup failed, see $log"
+d="$HOME/src/juan-skills"
+{ if [ -d "$d/.git" ]; then git -C "$d" pull -q --ff-only; else git clone -q --depth 1 https://github.com/jsanchezgarcia/juan-skills.git "$d"; fi && bash "$d/scripts/cloud-setup.sh"; } >/tmp/juan-skills-setup.log 2>&1 || echo "juan-skills setup failed, see /tmp/juan-skills-setup.log"
 true
 ```
 
-A failure is logged to `/tmp/juan-skills-setup.log` and never blocks the session.
+It runs `scripts/cloud-setup.sh`, so changes to the setup never need a new paste. A failure is logged to `/tmp/juan-skills-setup.log` and never blocks the session. Cloud environments cache the setup script's result, so `cloud-setup.sh` also installs a Claude Code SessionStart hook that pulls the latest push at the start of every session; a skill added or removed shows up one session later.
+
+In the cloud, the web app's `/` menu doesn't list these skills. Ask for one by name instead ("use wayfinder"). To make that work, the cloud copies drop the manual-only flag, so there the agent can also pick `wayfinder`, `to-spec`, `to-tickets` and `setup-matt-pocock-skills` on its own.
 
 Check a cloud with a new session: "List your skills, say which commit `~/src/juan-skills` is on, and show `/tmp/juan-skills-setup.log`." Compare the commit with `git log -1` here.
 
@@ -66,8 +65,8 @@ Check a cloud with a new session: "List your skills, say which commit `~/src/jua
 | Script | Does |
 |---|---|
 | `install.sh` | One-time machine setup (above) |
-| `link.sh` | Links the skills into every local agent; run by the commit and pull hooks |
-| `cloud-setup.sh` | The cloud snippet as a file |
+| `link.sh` | Links the skills into every local agent; run by the commit and pull hooks. `--cloud` copies them for cloud agents instead |
+| `cloud-setup.sh` | Cloud setup: pulls, copies the skills with `link.sh --cloud`, installs the SessionStart hook |
 | `publish-amp.sh` | Publishes to Amp's hosted repo; run by the push hook |
 | `check-upstream.sh` | Reports upstream changes and prints the update command |
 | `build-claude-ai.sh` | Fallback if the Claude Code cloud setup script can't load skills: zips changed skills for upload at claude.ai → Customize → Skills |

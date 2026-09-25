@@ -3,7 +3,11 @@
 # Symlinks into ~/.claude/skills (Claude Code) and ~/.agents/skills (Codex, Amp, Cursor).
 # Copies into ~/.cursor/skills, because Cursor's "Sync Skills for Cloud Agents" uploads that folder
 # and may not follow symlinks. Safe to re-run; the post-commit and post-merge hooks run it.
+# --cloud (for cloud agents, see cloud-setup.sh): copies into ~/.claude/skills and ~/.agents/skills
+# with the manual-only flags removed, because cloud UIs can't invoke a skill by slash command.
 set -euo pipefail
+cloud=false
+[ "${1:-}" = --cloud ] && cloud=true
 repo="$(cd "$(dirname "$0")/.." && pwd)"
 src="$repo/.agents/skills"
 marker=".juan-skills"
@@ -35,6 +39,9 @@ copy_into() {
   done
   for entry in "$src"/*/; do
     name="$(basename "$entry")"
+    if [ -L "$dest/$name" ]; then
+      case "$(readlink "$dest/$name")" in "$repo"/*) rm "$dest/$name" ;; esac
+    fi
     if [ -e "$dest/$name" ] && [ ! -f "$dest/$name/$marker" ]; then
       echo "skip $dest/$name: not created by this repo; remove it to copy the repo version" >&2
       continue
@@ -42,7 +49,15 @@ copy_into() {
     rm -rf "${dest:?}/$name"
     cp -R "$entry" "$dest/$name"
     touch "$dest/$name/$marker"
+    if $cloud; then allow_model_invocation "$dest/$name"; fi
   done
+}
+
+allow_model_invocation() {
+  sed -i.bak '/^disable-model-invocation: true$/d' "$1/SKILL.md" && rm "$1/SKILL.md.bak"
+  [ -f "$1/agents/openai.yaml" ] || return 0
+  sed -i.bak 's/allow_implicit_invocation: false/allow_implicit_invocation: true/' "$1/agents/openai.yaml" &&
+    rm "$1/agents/openai.yaml.bak"
 }
 
 report_strays() {
@@ -54,8 +69,15 @@ report_strays() {
   done
 }
 
-link_into "$HOME/.claude/skills"
-link_into "$HOME/.agents/skills"
-copy_into "$HOME/.cursor/skills"
-for d in "$HOME/.claude/skills" "$HOME/.agents/skills" "$HOME/.cursor/skills"; do report_strays "$d"; done
+if $cloud; then
+  copy_into "$HOME/.claude/skills"
+  copy_into "$HOME/.agents/skills"
+  dirs=("$HOME/.claude/skills" "$HOME/.agents/skills")
+else
+  link_into "$HOME/.claude/skills"
+  link_into "$HOME/.agents/skills"
+  copy_into "$HOME/.cursor/skills"
+  dirs=("$HOME/.claude/skills" "$HOME/.agents/skills" "$HOME/.cursor/skills")
+fi
+for d in "${dirs[@]}"; do report_strays "$d"; done
 echo "linked $(ls "$src" | wc -l | tr -d ' ') skills"
