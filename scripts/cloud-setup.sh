@@ -12,16 +12,17 @@ git -C "$repo" pull -q --ff-only || echo "pull failed; using the current checkou
 
 mkdir -p "$(dirname "$settings")"
 [ -f "$settings" ] || echo '{}' >"$settings"
-grep -qF "scripts/cloud-setup.sh" "$settings" && exit 0
+# Installs the hook once, and turns off the compound-engineering plugin, whose skills this repo
+# already carries (the cloud enables the plugin on its own).
 python3 - "$settings" "$hook" <<'EOF'
 import json, sys
 path, command = sys.argv[1], sys.argv[2]
 with open(path) as f:
     settings = json.load(f)
-settings.setdefault("hooks", {}).setdefault("SessionStart", []).append(
-    {"hooks": [{"type": "command", "command": command}]}
-)
+session_start = settings.setdefault("hooks", {}).setdefault("SessionStart", [])
+if "scripts/cloud-setup.sh" not in json.dumps(session_start):
+    session_start.append({"hooks": [{"type": "command", "command": command}]})
+settings.setdefault("enabledPlugins", {})["compound-engineering@compound-engineering-plugin"] = False
 with open(path, "w") as f:
     json.dump(settings, f, indent=2)
 EOF
-echo "installed the SessionStart hook in $settings"
