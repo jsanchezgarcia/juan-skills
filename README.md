@@ -1,6 +1,6 @@
 # juan-skills
 
-The skills I use, for every agent: Claude Code, Codex, Amp and Cursor, locally and in the cloud. A skill is in use if its folder is in `.agents/skills/`. Push to GitHub and every agent picks up the change.
+The skills and global instructions I use, for every agent: Claude Code, Codex, Amp and Cursor, locally and in the cloud. A skill is in use if its folder is in `.agents/skills/`; the instructions are `global/AGENTS.md`. Push to GitHub and every agent picks up the change.
 
 | Source | Skills | Pinned in |
 |---|---|---|
@@ -9,6 +9,19 @@ The skills I use, for every agent: Claude Code, Codex, Amp and Cursor, locally a
 | Mine | design-review, split-commits, ship (simplify, review and open the PR for work done outside ce-work) | — |
 
 Upstream skills are installed with [`npx skills`](https://github.com/vercel-labs/skills) and never edited here.
+
+## Global instructions
+
+`global/AGENTS.md` holds my rules for every agent. `link.sh` links it to where each agent reads global instructions:
+
+| Agent | Reads | Why this name |
+|---|---|---|
+| Claude Code | `~/.claude/CLAUDE.md` | Claude Code reads `AGENTS.md` only inside projects; its one global file is `CLAUDE.md`, and a symlink to `AGENTS.md` is the documented way to share it |
+| Codex | `~/.codex/AGENTS.md` | |
+| Amp | `~/.config/amp/AGENTS.md` | |
+| Cursor | Settings → Rules → User Rules | No file; paste the content (see "You do") |
+
+It lives in `global/`, not the repo root, so it isn't also loaded as project instructions when working in this repo. Edit it here, commit, push.
 
 ## Set up with an agent
 
@@ -23,8 +36,8 @@ Paste this into Claude Code, Codex, Amp or Cursor on the new machine:
    - turns off Claude Code's claude.ai skill sync and the compound-engineering plugin, and stops Amp reading `~/.claude`, so each agent sees only these skills;
    - sets the git hooks: commit and pull re-link the skills, push publishes to Amp;
    - adds the `amp` remote;
-   - runs `link.sh`, which symlinks the skills into `~/.claude/skills` and `~/.agents/skills` and copies them into `~/.cursor/skills`.
-3. Read the `link.sh` output. `skip` lines are real folders blocking a link, and `not from juan-skills` lines are skills from somewhere else. Delete each one after I confirm it.
+   - runs `link.sh`, which symlinks the skills into `~/.claude/skills` and `~/.agents/skills`, copies them into `~/.cursor/skills`, and links `global/AGENTS.md` (above).
+3. Read the `link.sh` output. `skip` lines are real files or folders blocking a link, and `not from juan-skills` lines are skills from somewhere else. For a blocking instructions file, move anything worth keeping into `global/AGENTS.md`. Delete each one after I confirm it.
 4. Check: ask each agent to list its skills. It should list exactly the skills above, plus the agent's own built-ins.
 
 ### You do (once per account, not per machine)
@@ -33,9 +46,9 @@ Paste this into Claude Code, Codex, Amp or Cursor on the new machine:
 |---|---|
 | Claude Code cloud | At claude.ai/code, edit the environment and paste the cloud snippet below into **Setup script**.  |
 | Claude Code cloud | At claude.ai → Customize → Skills, remove the skills uploaded earlier, so they don't load twice. |
-| Claude Code cloud | At claude.ai → Customize, remove the compound-engineering plugin. The cloud turns it on at every session start, loading all of CE next to this repo's subset; `settings.json` can't keep it off. |
 | Codex cloud | At chatgpt.com/codex → Environments, paste the cloud snippet into the environment's setup script. |
 | Cursor cloud | Cursor Settings → Agents → turn on **Sync Skills for Cloud Agents**. It uploads `~/.cursor/skills`. |
+| Cursor | Cursor Settings → Rules → User Rules: paste `global/AGENTS.md`. Re-paste after changing it. |
 | Amp cloud | Nothing: pushing this repo publishes to Amp's hosted skills repo. |
 
 Cloud snippet:
@@ -46,7 +59,7 @@ d="$HOME/src/juan-skills"
 true
 ```
 
-It runs `scripts/cloud-setup.sh`, so changes to the setup never need a new paste. A failure is logged to `/tmp/juan-skills-setup.log` and never blocks the session. Cloud environments cache the setup script's result, so `cloud-setup.sh` also installs a Claude Code SessionStart hook that pulls the latest push at the start of every session; a skill added or removed shows up one session later.
+It runs `scripts/cloud-setup.sh`, so changes to the setup never need a new paste. A failure is logged to `/tmp/juan-skills-setup.log` and never blocks the session. Cloud environments cache the setup script's result, so `cloud-setup.sh` links the global instructions and also installs a Claude Code SessionStart hook that pulls the latest push at the start of every session; a skill added or removed shows up one session later.
 
 In the cloud, the web app's `/` menu doesn't list these skills. Ask for one by name instead ("use wayfinder"). To make that work, the cloud copies drop the manual-only flag, so there the agent can also pick `wayfinder`, `to-spec`, `to-tickets` and `setup-matt-pocock-skills` on its own.
 
@@ -66,8 +79,7 @@ Check a cloud with a new session: "List your skills, say which commit `~/src/jua
 | Script | Does |
 |---|---|
 | `install.sh` | One-time machine setup (above) |
-| `link.sh` | Links the skills into every local agent; run by the commit and pull hooks. `--cloud` copies them for cloud agents instead |
+| `link.sh` | Links the skills and `global/AGENTS.md` into every local agent; run by the commit and pull hooks. `--cloud` copies the skills for cloud agents instead |
 | `cloud-setup.sh` | Cloud setup: pulls, copies the skills with `link.sh --cloud`, installs the SessionStart hook |
 | `publish-amp.sh` | Publishes to Amp's hosted repo; run by the push hook |
 | `check-upstream.sh` | Reports upstream changes and prints the update command |
-| `build-claude-ai.sh` | Fallback if the Claude Code cloud setup script can't load skills: zips changed skills for upload at claude.ai → Customize → Skills |

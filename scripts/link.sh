@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Makes every harness on this machine see exactly the skills in .agents/skills.
+# Makes every harness on this machine see exactly the skills in .agents/skills, and links the
+# global instructions in global/AGENTS.md.
 # Symlinks into ~/.claude/skills (Claude Code) and ~/.agents/skills (Codex, Amp, Cursor).
 # Copies into ~/.cursor/skills, because Cursor's "Sync Skills for Cloud Agents" uploads that folder
 # and may not follow symlinks. Safe to re-run; the post-commit and post-merge hooks run it.
@@ -69,6 +70,21 @@ report_strays() {
   done
 }
 
+# Global instructions: one file, read by Claude Code as CLAUDE.md and by Codex and Amp as AGENTS.md.
+# A symlink is replaced; a real file is left alone with a warning.
+link_instructions() {
+  local dest
+  for dest in "$HOME/.claude/CLAUDE.md" "$HOME/.codex/AGENTS.md" "$HOME/.config/amp/AGENTS.md"; do
+    if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+      echo "skip $dest: a real file is in the way; move its content into global/AGENTS.md and remove it" >&2
+      continue
+    fi
+    mkdir -p "$(dirname "$dest")"
+    ln -sfn "$repo/global/AGENTS.md" "$dest"
+  done
+}
+
+link_instructions
 if $cloud; then
   copy_into "$HOME/.claude/skills"
   copy_into "$HOME/.agents/skills"
