@@ -6,7 +6,7 @@ The skills and global instructions I use, for every agent: Claude Code, Codex, A
 |---|---|---|
 | [mattpocock/skills](https://github.com/mattpocock/skills) | codebase-design, domain-modeling, grilling, improve-codebase-architecture, prototype, research, setup-matt-pocock-skills, tdd, to-spec, to-tickets, wayfinder, writing-for-agents | `skills-lock.json` (a `main` commit; his releases lag) |
 | [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) | ce-work, ce-debug, ce-handoff, ce-resolve-pr-feedback, ce-pov, ce-ideate, ce-explain, wtf, ce-optimize, ce-bakeoff, ce-compound, and the skills they call: ce-simplify-code, ce-code-review, ce-noslop, ce-commit-push-pr, ce-commit, ce-babysit-pr. Not ce-plan or ce-brainstorm: grilling, to-spec and wayfinder cover that half; lfg needs both, so it's out too. | `skills-lock.json` (a release tag) |
-| Mine | design-review, split-commits, ship (simplify, review and open the PR for work done outside ce-work) | — |
+| Mine | design-review, split-commits, ship (simplify, review and open the PR for work done outside ce-work), visual-pr (opens PRs with a visual change outline, evidence and merge risk; adapted from HumanLayer's show-me) | — |
 
 Upstream skills are installed with [`npx skills`](https://github.com/vercel-labs/skills) and never edited here.
 
