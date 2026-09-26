@@ -27,6 +27,8 @@ Pocock's skills settle what to build and record it in Linear; CE skills build an
 | One session, open decisions | `grilling` → `to-spec` in the same session → `ce-work` |
 | Bigger than one session | `wayfinder` → `to-spec` → `to-tickets` → a flow above per ticket |
 
-`ce-work` already simplifies, reviews and cleans the PR text before opening the PR. For work done without it, `/ship` runs those steps.
+`ce-work` already simplifies, reviews and cleans the PR text before opening the PR. For work done without it, `ship` runs those steps.
+
+Before opening a PR or telling me work is ready for review, those finishing steps must have run on the final diff: through `ce-work`, `ship`, or my explicit request. If they haven't, run `ship` first. "Handle this" or "implement that" includes them.
 
 Review work written in this session from a fresh context: whenever `ce-code-review` runs on it, including inside `ce-work`, run it in a subagent that gets only the goal (ticket, spec or plan path, or two sentences on what the change is for), the base branch and the repository, never the implementation reasoning. The subagent returns the review receipt; apply the findings in the implementing thread.

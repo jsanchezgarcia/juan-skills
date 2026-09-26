@@ -1,7 +1,6 @@
 ---
 name: ship
-description: Take changes made outside ce-work to an open PR. Simplifies, reviews and fixes, then commits, pushes and opens the PR.
-disable-model-invocation: true
+description: Finish work that didn't go through ce-work, up to an open PR. Simplifies, reviews from a fresh context, fixes, then commits, pushes and opens the PR. Use before opening a PR or calling work ready for review when those steps haven't run on it.
 ---
 
 # Ship

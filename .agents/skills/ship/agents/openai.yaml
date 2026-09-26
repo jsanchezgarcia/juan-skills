@@ -2,4 +2,4 @@ interface:
   display_name: "Ship"
   short_description: "Simplify, review and open a PR for work done outside ce-work"
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true
