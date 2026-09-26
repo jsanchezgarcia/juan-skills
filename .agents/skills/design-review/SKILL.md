@@ -6,7 +6,7 @@ argument-hint: "[plan file path, topic, or feature description]"
 
 # Design Review
 
-Explore multiple structurally different approaches for a feature, synthesize the best design, and present a clear recommendation. Use standalone on existing plans or as the design phase during `/plan-ardent`.
+Explore multiple structurally different approaches for a feature, synthesize the best design, and present a clear recommendation, for an existing plan or spec or a feature described in the conversation.
 
 ## Input
 
@@ -15,20 +15,20 @@ Explore multiple structurally different approaches for a feature, synthesize the
 ### Resolve the input
 
 - **If a file path** — read the plan directly
-- **If a topic/keyword** — search `docs/plans/` for matching plan files, pick the best match and confirm with the user
-- **If a feature description** (called from `/plan-ardent`) — use the feature description and research context already gathered
-- **If empty** — list plans in `docs/plans/` and ask the user to pick one
+- **If a topic/keyword or Linear issue** — find the matching spec (the Linear issue, or a plan file in `docs/plans/`), pick the best match and confirm with the user
+- **If a feature description** — use it and any research already in the conversation
+- **If empty** — ask the user which spec, plan or feature to review
 
 ## Step 1: Gather Context
 
 **If reviewing an existing plan** (standalone invocation):
 
 Launch in the background (`run_in_background: true`):
-- **Codebase exploration** — Task with `subagent_type: "Explore"`, `model: "haiku"`: "Find existing patterns, conventions, and current implementations related to: {plan summary}. Focus on the packages and files the plan touches. Map the current data flow and abstractions in the affected area."
+- **Codebase exploration** — an Explore subagent: "Find existing patterns, conventions, and current implementations related to: {plan summary}. Focus on the packages and files the plan touches. Map the current data flow and abstractions in the affected area."
 
 Consolidate: relevant file paths, existing abstractions, current data flow.
 
-**If called from `/plan-ardent`** — use the research context already gathered in Phase 1. Don't re-run research.
+**If the conversation already holds research on this feature**, use it instead of re-running exploration.
 
 ## Step 2: Understand Current State
 
@@ -40,7 +40,7 @@ Consolidate: relevant file paths, existing abstractions, current data flow.
 4. **Layer Responsibilities** — Which package owns what concern? Right layer?
 5. **What Gets Simpler** — What existing code becomes unnecessary? If nothing, flag it.
 
-**If called from `/plan-ardent`** — there's no plan yet. Use the feature description and codebase context to understand the problem space. The first approach you generate in Step 3 can be the "obvious" solution.
+**If there's no plan yet**, use the feature description and codebase context to understand the problem space. The first approach you generate in Step 3 can be the "obvious" solution.
 
 ## Step 3: Explore Approaches
 
@@ -62,7 +62,7 @@ Tactics for finding genuinely different approaches:
 
 ## Step 4: Synthesize and Decide
 
-This is where you do the hard thinking. Don't just pick from the list — actively look for a better option:
+Don't just pick from the list — actively look for a better option:
 
 1. **Compare** the approaches: complexity, what gets simpler, layer fit, fragility/coupling
 2. **Cross-pollinate** — can the data flow from one approach + the abstraction boundaries from another yield something better than any individual option?
@@ -129,8 +129,7 @@ Present the recommendation to the user with **AskUserQuestion**:
 **Options:**
 1. **Looks good, proceed** — Accept the design
 2. **I have concerns** — Discuss specific aspects of the recommendation
-3. **Run /rethink** — Full rethink analysis for a deeper redesign
-4. **Explore more** — Alternatives feel too similar, look harder for different options
+3. **Explore more** — Alternatives feel too similar, look harder for different options
 
 ### If reviewing an existing plan and the recommendation differs
 
@@ -139,4 +138,4 @@ Present the recommendation to the user with **AskUserQuestion**:
 3. Re-run Steps 2-5 on the revised plan to confirm improvements
 4. Loop back to Step 6
 
-NEVER CODE. This is a design thinking tool — explore, synthesize, recommend, iterate. Implementation happens in /work.
+Write no code here: explore, synthesize, recommend, iterate. Implementation happens afterwards in `ce-work`.
