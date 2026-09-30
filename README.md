@@ -65,6 +65,17 @@ In the cloud, the web app's `/` menu doesn't list these skills. Ask for one by n
 
 Check a cloud with a new session: "List your skills, say which commit `~/src/juan-skills` is on, and show `/tmp/juan-skills-setup.log`." Compare the commit with `git log -1` here.
 
+## Conductor cloud computer
+
+`conductor/` holds copies of the scripts saved on the Conductor cloud computer. Conductor doesn't read these files: they are there so the setup has a history and can be restored. After changing a script in Conductor, copy it here, commit, push; to restore, paste a file back into Conductor.
+
+| File | Pasted into Conductor as | Does |
+|---|---|---|
+| `conductor/install.sh` | The computer's install script (runs once per snapshot build) | Installs the toolchain and Playwright's Chromium, re-exports `OPENROUTER_API_KEY`, installs the wait-for-setup hook for Claude Code and Codex, and runs the cloud snippet above |
+| `conductor/setup/<repo>.sh` | That repository's setup script (runs in every new workspace) | Installs the repository's dependencies and records progress in `.context/setup-status`, with the output in `.context/setup.log` |
+
+Why the hook: Conductor starts the agent while the setup script is still running, so an agent's first `npm` commands ran against a half-installed `node_modules`. Each setup script writes `running` to `.context/setup-status`, then its exit code. `/usr/local/bin/wait-for-workspace-setup`, run as a SessionStart hook, holds the agent's first turn until that exit code appears, then tells the agent whether setup finished or failed. It stops waiting after 14 minutes, and doesn't wait at all in a workspace without the file. The Codex hook lives in `/etc/codex/config.toml` because Codex treats hooks there as managed and runs them without review; a hook in `~/.codex` waits for an approval no cloud session can give.
+
 ## Day to day
 
 | Change | Do |
