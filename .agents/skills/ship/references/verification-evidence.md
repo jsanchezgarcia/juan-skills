@@ -1,6 +1,6 @@
 # Matching finishing evidence
 
-Keep a small evidence record and logs in gitignored workspace context (for example `.context/finishing/`), or outside the repository when no ignored context directory exists. This is a record, not a new cache service. Missing or uncertain identity means rerun the affected check or widen review.
+Keep a small evidence record and logs in gitignored workspace context (for example `.context/finishing/`), or outside the repository when no ignored context directory exists. This is a record, not a new cache service. Missing or uncertain identity means rerun the affected check or widen review. Completion requires usable receipts, findings, input identities and check results; optional historical narratives or cost reports are separate follow-up work, not another finishing gate.
 
 ## Record actual inputs
 

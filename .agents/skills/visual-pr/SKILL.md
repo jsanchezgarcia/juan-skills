@@ -6,7 +6,7 @@ metadata:
     skill: show-me
     author: Dex Horthy
     organisation: Humanlayer
-    url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
+    url: 'https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md'
 ---
 
 # Describe a Pull Request
@@ -33,7 +33,7 @@ Create or update the pull request for the current task with a concise descriptio
 
 3. Gather only the context needed to explain the change:
    - Read the ticket and any relevant task artifacts.
-   - Read the complete PR diff and enough surrounding code to understand behavior and ownership.
+   - Account for the complete PR diff using the owner's completed context and matching review/evidence artifacts when available. Read the diff and surrounding source to fill gaps; a description update alone does not restart exploration or review.
    - Use `gh pr view` to collect PR metadata and changed files.
    - Read `{SKILLBASE}/references/show-me.md` for the visual-outline conventions used in the PR body.
 
