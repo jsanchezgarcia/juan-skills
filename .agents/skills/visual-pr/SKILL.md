@@ -22,7 +22,7 @@ Create or update the pull request for the current task with a concise descriptio
 2. Identify the stage and publication authority:
    - **Description only:** prepare the body locally. Updating an existing PR body needs authorization to update it; writing a description is not permission to commit, push or create a PR.
    - **Draft:** when publication is authorized and repository policy permits overlap, require completed simplification/review and passing quick/focused evidence, then publish with broad local/CI checks explicitly pending. Otherwise complete the required pre-publication gate first.
-   - **Final:** update the same PR and mark ready only after completed review coverage, the repository's local final gate and current required CI pass for the relevant inputs/base/comparison. The caller owns running those checks; consume its matching evidence, do not restart them.
+   - **Final:** update the same PR and mark ready only after completed review coverage, the repository's final gate (local, or CI where the repository makes CI the gate) and current required CI pass for the relevant inputs/base/comparison. The caller owns running those checks; consume its matching evidence, do not restart them.
    - Check the current branch for a PR with `gh pr view --json url,number,title,state,isDraft,baseRefName,headRefName,headRefOid 2>/dev/null`.
    - If no PR exists, inspect `git status --short --branch` and the commits on the current branch.
    - Before any authorized publication, confirm the offered files and current branch. Preserve unrelated work and never publish from the default branch. Create a branch or commit only when authorized by the user; no implicit rebases, merges, force-pushes or deployments.
