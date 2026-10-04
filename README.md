@@ -4,7 +4,7 @@ The skills and global instructions I use, for every agent: Claude Code, Codex, A
 
 | Source | Skills | Pinned in |
 |---|---|---|
-| [mattpocock/skills](https://github.com/mattpocock/skills) | codebase-design, domain-modeling, grilling, improve-codebase-architecture, prototype, research, setup-matt-pocock-skills, tdd, to-spec, to-tickets, wayfinder, writing-for-agents | `skills-lock.json` (a `main` commit; his releases lag) |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | codebase-design, domain-modeling, grilling, improve-codebase-architecture, prototype, research, retro, setup-matt-pocock-skills, tdd, to-spec, to-tickets, wayfinder, writing-for-agents | `skills-lock.json` (v1.3.1) |
 | [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) | ce-work, ce-debug, ce-handoff, ce-resolve-pr-feedback, ce-pov, ce-ideate, ce-explain, wtf, ce-optimize, ce-bakeoff, ce-compound, and the skills they call: ce-simplify-code, ce-code-review, ce-noslop, ce-commit-push-pr, ce-commit, ce-babysit-pr. Not ce-plan or ce-brainstorm: grilling, to-spec and wayfinder cover that half; lfg needs both, so it's out too. | `skills-lock.json` (a release tag) |
 | Mine | design-review, split-commits, ship (simplify, review and open the PR for work done outside ce-work), visual-pr (opens PRs with a visual change outline, evidence and merge risk; adapted from HumanLayer's show-me) | — |
 
@@ -77,6 +77,10 @@ Check a cloud with a new session: "List your skills, say which commit `~/src/jua
 Why the hook: Conductor starts the agent while the setup script is still running, so an agent's first `npm` commands ran against a half-installed `node_modules`. Each setup script writes `running` to `.context/setup-status`, then its exit code. `/usr/local/bin/wait-for-workspace-setup`, run as a SessionStart hook, holds the agent's first turn until that exit code appears, then tells the agent whether setup finished or failed. It stops waiting after 14 minutes, and doesn't wait at all in a workspace without the file. The Codex hook lives in `/etc/codex/config.toml` because Codex treats hooks there as managed and runs them without review; a hook in `~/.codex` waits for an approval no cloud session can give.
 
 ## Day to day
+
+After a costly repair loop or substantial delivery, ask for `retro` with the session you want reviewed. It proposes improvements to agent instructions, navigation, automated checks and tooling; it does not add another delivery gate. For example: "Use retro on the eval-cost session and recommend what would have caught the review findings earlier." Use `ce-compound` to record a solved problem's durable lesson.
+
+For a spec split into tickets, follow the [ticket execution guide](.agents/skills/ship/references/ticket-execution.md). Run independent ready tickets together when isolation and shared contracts permit it, then integrate and finish once through `ce-work` and `ship`. PR descriptions continue to use `visual-pr`.
 
 | Change | Do |
 |---|---|

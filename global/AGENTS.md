@@ -31,6 +31,10 @@ Open and describe every PR with `visual-pr`, including work built with `ce-work`
 
 `ce-work`'s return-to-caller mode requires a real plan/spec path, for example `ce-work mode:return-to-caller docs/plans/fix.md`. If a clear bare request has no such file, save a short execution brief naming the goal, owned scope and focused verification in gitignored workspace context (or a temporary directory). Do not add a planning interview or require a full plan template. Pass that path; workers receive a bounded brief from the owner. Never pass a bare prompt after the mode token.
 
+For multi-ticket implementation, read `references/ticket-execution.md` in the installed `ship` skill. It schedules independent tickets while keeping one integration and finishing owner.
+
+After a costly repair loop or substantial delivery, suggest `retro` when session evidence points to an improvement in agent instructions, navigation, checks or tooling. Run it when requested; its recommendations are follow-up work, not another delivery gate. Use `ce-compound` for a solved problem's durable lesson.
+
 ### Proportional execution
 
 - Work inline by default for small clear implementation, bounded searches, mechanical edits and short explanations. Invoking a skill is not a reason to create an implementation worker. Delegate when the owner can make meaningful parallel progress, substantial isolated exploration benefits from a separate context, or independent review requires one. Before dispatch, name the bounded output and why separation earns its overhead.
