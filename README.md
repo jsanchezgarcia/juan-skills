@@ -78,6 +78,8 @@ Why the hook: Conductor starts the agent while the setup script is still running
 
 ## Day to day
 
+Ask to `ship` and the agent finishes review, commits, pushes and opens a regular PR without another confirmation. Required checks still determine merge readiness; an open PR can have checks pending. Explicit local-only or draft requests take precedence. An implementation-only request does not authorize publication.
+
 After a costly repair loop or substantial delivery, ask for `retro` with the session you want reviewed. It proposes improvements to agent instructions, navigation, automated checks and tooling; it does not add another delivery gate. For example: "Use retro on the eval-cost session and recommend what would have caught the review findings earlier." Use `ce-compound` to record a solved problem's durable lesson.
 
 For a spec split into tickets, follow the [ticket execution guide](.agents/skills/ship/references/ticket-execution.md). Run independent ready tickets together when isolation and shared contracts permit it, then integrate and finish once through `ce-work` and `ship`. PR descriptions continue to use `visual-pr`.

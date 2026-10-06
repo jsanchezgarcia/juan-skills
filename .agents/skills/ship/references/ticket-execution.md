@@ -15,6 +15,6 @@ A **ready frontier** is the set of unfinished tickets whose dependencies have be
 
 Shared checkouts use the `ce-work` shared-workspace contract: exclusive file ownership, no worker Git writes, and owner-run mutating verification after the wave. Workers never rebuild shared outputs while another test consumes them.
 
-Follow the repository's issue-tracker transitions. A locally completed ticket does not automatically become Done; use its configured completion rule. Publication still requires authorization, and authorized PRs use `visual-pr`.
+Follow the repository's issue-tracker transitions. A locally completed ticket does not automatically become Done; use its configured completion rule. A user request to ship supplies publication authority under `ship`; an implementation-only request does not. Authorized PRs use `visual-pr`, and workers never publish.
 
 Recheck evaluation evidence against the actual integrated inputs. Parallel scheduling does not make results from an older recipe, fixture set, configuration or comparison reusable.
