@@ -82,6 +82,8 @@ After a costly repair loop or substantial delivery, ask for `retro` with the ses
 
 For a spec split into tickets, follow the [ticket execution guide](.agents/skills/ship/references/ticket-execution.md). Run independent ready tickets together when isolation and shared contracts permit it, then integrate and finish once through `ce-work` and `ship`. PR descriptions continue to use `visual-pr`.
 
+When a review hits an agent-thread limit, `ship` uses the [capacity recovery adapter](.agents/skills/ship/references/review-capacity.md) to retain completed results and resume missing work through the main agent. The adapter lives in our own skill; upstream CE files remain unchanged. After updating CE, check its dispatch and finishing contracts against the adapter before using recovery.
+
 | Change | Do |
 |---|---|
 | Edit or add one of my skills | Edit under `.agents/skills/`, commit, push. Commit re-links locally; push reaches Amp directly and the other clouds on their next session. |
